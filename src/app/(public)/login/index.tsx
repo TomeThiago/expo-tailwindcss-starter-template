@@ -1,8 +1,8 @@
 import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import Checkbox from "expo-checkbox";
 
-import logoImg from "../../assets/images/logo.png";
-import { Input } from "../../components/forms/input";
+import logoImg from "../../../assets/images/logo.png";
+import { Input } from "../../../components/forms/input";
 import { useState } from "react";
 import { router } from "expo-router";
 
@@ -34,6 +34,7 @@ export default function Index() {
             label="E-mail"
             name="email"
             placeholder="Digite o seu e-mail"
+            keyboardType="email-address"
           />
 
           <Input
@@ -44,19 +45,32 @@ export default function Index() {
           />
 
           <View className="flex flex-row items-center gap-2">
-            <Checkbox value={isChecked} onValueChange={setChecked} />
-            <Text>Mantenha-me conectado</Text>
+            <Checkbox
+              value={isChecked}
+              onValueChange={setChecked}
+              color="#007dfe"
+            />
+            <Pressable onPress={() => setChecked((value) => !value)}>
+              <Text>Mantenha-me conectado</Text>
+            </Pressable>
           </View>
         </View>
 
         <Pressable
-          className="bg-primary w-full h-16 rounded-3xl items-center justify-center mb-5"
-          onPress={() => router.push("/")}
+          className="bg-primary w-full h-16 rounded-3xl items-center justify-center "
+          onPress={() => router.push("/home")}
         >
           <Text className="font-semibold text-2xl text-white">Entrar</Text>
         </Pressable>
 
-        <TouchableOpacity onPress={() => router.push("/")}>
+        <View className="my-4 flex-row">
+          <Text className="font-medium text-lg mr-2">Não tem uma conta?</Text>
+          <TouchableOpacity onPress={() => router.push("/create-account")}>
+            <Text className="font-bold text-primary text-lg">Criar conta</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity onPress={() => router.push("/forgot-password")}>
           <Text className="underline">Esqueci minha senha</Text>
         </TouchableOpacity>
       </View>

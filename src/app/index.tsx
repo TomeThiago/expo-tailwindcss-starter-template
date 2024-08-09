@@ -1,4 +1,4 @@
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 import welcomeImg from "../assets/images/welcome.jpg";
 import { router } from "expo-router";
@@ -30,11 +30,17 @@ export default function Index() {
         </Text>
 
         <Pressable
-          className="bg-primary w-full h-16 rounded-3xl items-center justify-center"
+          className="bg-primary w-full h-16 rounded-3xl items-center justify-center mb-4"
           onPress={() => router.push("/login")}
         >
-          <Text className="font-semibold text-2xl text-white">Iniciar</Text>
+          <Text className="font-semibold text-2xl text-white">Fazer login</Text>
         </Pressable>
+
+        <TouchableOpacity onPress={() => router.push("/create-account")}>
+          <Text className="font-semibold text-primary underline text-lg">
+            Criar uma conta
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
