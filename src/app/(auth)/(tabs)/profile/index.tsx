@@ -1,8 +1,7 @@
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 import Constants from "expo-constants";
 import { Menu } from "./_components/menu";
-import { router } from "expo-router";
 
 import logoImg from "../../../../assets/images/logo.png";
 
@@ -31,15 +30,6 @@ export default function Profile() {
         />
 
         <Text className="text-2xl font-semibold">Usuário</Text>
-
-        <Pressable
-          className="bg-primary py-2 px-3 rounded-3xl items-center justify-center "
-          onPress={() => router.push("/home")}
-        >
-          <Text className="font-semibold text-lg text-white">
-            Editar Perfil
-          </Text>
-        </Pressable>
       </View>
       <Menu />
     </View>

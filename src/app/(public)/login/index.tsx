@@ -1,13 +1,50 @@
-import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Pressable,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Checkbox from "expo-checkbox";
 
 import logoImg from "../../../assets/images/logo.png";
 import { Input } from "../../../components/forms/input";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { router } from "expo-router";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ErrorInput } from "../../../components/forms/input/error-input";
 
-export default function Index() {
+interface LoginFormDTO {
+  login: string;
+  password: string;
+}
+
+export default function Login() {
   const [isChecked, setChecked] = useState(false);
+  const inputPassword = useRef<TextInput>(null);
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<LoginFormDTO>({
+    defaultValues: {
+      login: "admin@admin.com",
+      password: "12345678",
+    },
+  });
+
+  const onSubmit: SubmitHandler<LoginFormDTO> = (data) => {
+    if (data.login !== "admin@admin.com" || data.password !== "12345678") {
+      Alert.alert("E-mail ou senha inválidos");
+
+      return;
+    }
+
+    router.push("/home");
+  };
 
   return (
     <View
@@ -30,19 +67,55 @@ export default function Index() {
         <Text className="font-semibold text-2xl mb-4">Entre na plataforma</Text>
 
         <View className=" w-full flex gap-4 mb-8">
-          <Input
-            label="E-mail"
-            name="email"
-            placeholder="Digite o seu e-mail"
-            keyboardType="email-address"
-          />
+          <View className="gap-1">
+            <Controller
+              name="login"
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="E-mail"
+                  placeholder="Digite o seu e-mail"
+                  keyboardType="email-address"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  returnKeyType="next"
+                  onSubmitEditing={() => inputPassword?.current?.focus()}
+                />
+              )}
+            />
 
-          <Input
-            label="Senha"
-            name="password"
-            placeholder="Digite a sua senha"
-            secureTextEntry
-          />
+            {errors.login && (
+              <ErrorInput message="O campo e-mail deve ser informado." />
+            )}
+          </View>
+
+          <View className="gap-1">
+            <Controller
+              name="password"
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  ref={inputPassword}
+                  label="Senha"
+                  placeholder="Digite a sua senha"
+                  secureTextEntry
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
+            {errors.password && (
+              <ErrorInput message="O campo senha deve ser informado." />
+            )}
+          </View>
 
           <View className="flex flex-row items-center gap-2">
             <Checkbox
@@ -57,8 +130,8 @@ export default function Index() {
         </View>
 
         <Pressable
-          className="bg-primary w-full h-16 rounded-3xl items-center justify-center "
-          onPress={() => router.push("/home")}
+          className="bg-primary w-full h-16 rounded-3xl items-center justify-center"
+          onPress={handleSubmit(onSubmit)}
         >
           <Text className="font-semibold text-2xl text-white">Entrar</Text>
         </Pressable>
